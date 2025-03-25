@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Важни линкове | Creative Coders</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #3498db;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        nav {
+            background-color: #2c3e50;
+            padding: 15px 0;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #3498db;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .links-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        }
+        .link-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .link-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .link-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #3498db;
+        }
+        .link-url a {
+            color: #2c3e50;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .link-url a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Creative Coders</h1>
+        <p>Състезание по програмиране за ученици</p>
+    </header>
+    
+    <nav>
+        <a href="programa.html">Програма</a>
+        <a href="vazhni-linkove.html">Важни линкове</a>
+        <a href="socialni-mrezi.html">Социални мрежи</a>
+        <a href="registraciq.html">Регистрация</a>
+        <a href="proverka.html">Проверка</a>
+        <a href="kontakti.html">Контакти</a>
+    </nav>
+    
+    <div class="container">
+        <h2>Важни линкове</h2>
+        
+        <div class="links-container">
+            <div class="link-item">
+                <div class="link-title">Официален сайт на състезанието</div>
+                <div class="link-url"><a href="https://todorov-tees.my.canva.site/creative-coders" target="_blank">https://todorov-tees.my.canva.site/creative-coders</a></div>
+            </div>
+            
+            <div class="link-item">
+                <div class="link-title">Scratch платформа</div>
+                <div class="link-url"><a href="https://scratch.mit.edu/" target="_blank">https://scratch.mit.edu/</a></div>
+            </div>
+            
+            <div class="link-item">
+                <div class="link-title">Вход в Microsoft Office (за ученици)</div>
+                <div class="link-url"><a href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=4765445b-32c6-49b0-83e6-1d93765276ca&redirect_uri=https%3A%2F%2Fwww.office.com%2Flandingv2&response_type=code%20id_token&scope=openid%20profile%20https%3A%2F%2Fwww.office.com%2Fv2%2FOfficeHome.All&response_mode=form_post&nonce=638785150679524001.MjNhMDk2YzMtOGU1YS00NzhjLTg4MzItMDZhZmJkZGUxZTM5MDBkODMyYWUtMDQ4Yi00MDg4LWFhNTYtMzdmYzU4NzlmMmY3&ui_locales=bg&mkt=bg&client-request-id=a1423226-1ca8-4cbb-a06a-8c7e90ec4803&state=Dz1dgBTY5g1Bv3HOv4SCvAX8wbTRftL-shpDz7Kg8zX9sEimeXx1yRFsH75A53x6OGBZdFQToo88j5rDSUyXRW610BIsCqMlUkMMvBprFk2PVsNbHR8ntEgM5hUic4_0cqwHxTU9oHSv_wqiPZ6HzLkH8x2DPDAQS44yIwx7scG0Z2GVdTL4ydfVz79puD2coeJdSIM71ae3Inau529mH97mcZAHeIOq_CtyJBbgTfNf16s7a4SW6gSgx8mXRbpC1e52aeieD1_zDPCKFJgbvgwgnPXF6mXIE0LFBQdRO14&x-client-SKU=ID_NET8_0&x-client-ver=8.5.0.0&sso_reload=true" target="_blank">Вход в Microsoft Office</a></div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Creative Coders. Всички права запазени.</p>
+    </footer>
+
+    <script>
+        if (localStorage.getItem('authenticated') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
