@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <title>Creative coders</title>
+    <style>
+        /* Общи стилове */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
+            line-height: 1.6;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Навигация - Десктоп версия */
+        nav {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav li {
+            margin: 0 12px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Бургер меню - скрито по подразбиране */
+        .burger-menu {
+            display: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Мобилна навигация */
+        @media (max-width: 1027px) {
+            /* Скриваме обикновеното меню */
+            nav ul {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+                height: 100vh;
+                padding: 80px 20px 20px;
+                align-items: center;
+                justify-content: flex-start;
+                z-index: 999;
+                overflow-y: auto;
+            }
+            
+            nav ul.active {
+                display: flex;
+                animation: fadeIn 0.5s ease;
+            }
+            
+            nav li {
+                margin: 10px 0;
+                width: 100%;
+                text-align: center;
+            }
+            
+            nav a {
+                display: block;
+                padding: 12px;
+                border-radius: 6px;
+                font-size: 1.1rem;
+                background-color: rgba(255, 255, 255, 0.1);
+                margin-bottom: 5px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            nav a.active {
+                background-color: rgba(255, 255, 255, 0.2);
+                font-weight: 700;
+            }
+            
+            /* Показваме бургер менюто */
+            .burger-menu {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 15px;
+                position: relative;
+            }
+            
+            /* Анимация за бургер менюто при отваряне */
+            .burger-menu.active .burger-line:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 6px);
+            }
+            
+            .burger-menu.active .burger-line:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .burger-menu.active .burger-line:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -6px);
+            }
+            
+            /* Осигуряваме, че всички навигационни елементи са видими */
+            #login-nav, #register-nav, #profile-nav, #admin-nav, #logout-nav, #jury-nav {
+                display: block !important;
+            }
+            
+            /* Останали адаптивни стилове */
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            #home h1 {
+                font-size: 2rem;
+            }
+            
+            /* Адаптивни стилове за административния панел */
+            #admin .card {
+                padding: 15px;
+            }
+            
+            #participants-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            #participants-table th, 
+            #participants-table td {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            
+            #participants-table button {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+                margin: 2px;
+            }
+        }
+
+        @media (min-width: 1028px) {
+            /* Скриваме бургер менюто при големи екрани */
+            .burger-menu {
+                display: none !important;
+            }
+            
+            /* Показваме стандартното меню */
+            nav ul {
+                display: flex !important;
+            }
+        }
+
+        /* Карти */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-header h2 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #2c3e50);
+            border-radius: 3px;
+        }
+
+        /* Форми */
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #f8f9fa;
+        }
+
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+            background-color: white;
+        }
+
+        /* Бутони */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            box-shadow: 0 6px 12px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Стилове за програмата */
+        .schedule-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        /* Десктоп таблица */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .schedule-table th, 
+        .schedule-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .schedule-table th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+
+        .schedule-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .schedule-table tr:hover {
+            background-color: #f1f8ff;
+        }
+
+        /* Мобилна версия */
+        .mobile-view {
+            display: none;
+        }
+
+        .schedule-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .schedule-date {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .schedule-time {
+            color: #3498db;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .schedule-activity {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .schedule-location {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .schedule-location::before {
+            content: "📍";
+            margin-right: 5px;
+        }
+
+        /* Таблици */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #f1f8ff;
+        }
+
+        /* Алерти */
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Страници */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Модален прозорец */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #6c757d;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #343a40;
+        }
+
+        /* Галерия */
+        /* Добавете това към съществуващите стилове */
+.gallery-item {
+    position: relative; /* Важно за позициониране на бутона */
+}
+
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: none; /* Скрит по подразбиране */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.gallery-item:hover .delete-btn {
+    display: flex; /* Показва се при hover */
+}
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .gallery-item {
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+            z-index: 1;
+        }
+
+        .gallery-item div {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 15px;
+            color: white;
+            z-index: 2;
+            font-weight: 600;
+        }
+
+        /* Хедър на началната страница */
+        #home .card {
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.9) 0%, rgba(26, 37, 47, 0.9) 100%), 
+                        url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            color: white;
+        }
+
+        #home h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #home p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        #home .btn {
+            margin: 10px;
+            padding: 14px 32px;
+            font-size: 1.1rem;
+        }
+
+        /* Конкурсна страница */
+        #competition .card {
+            text-align: center;
+        }
+
+        .competition-status {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .task-link {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .task-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        /* Админ форма за конкурс */
+        .admin-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Анимации */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        /* Адаптивни стилове за програмата */
+        @media (max-width: 768px) {
+            .desktop-view {
+                display: none;
+            }
+            
+            .mobile-view {
+                display: block;
+            }
+            
+            .schedule-item {
+                padding: 12px;
+            }
+            
+            .schedule-date {
+                font-size: 1rem;
+            }
+        }
+
+        /* Стилове за качване на снимки */
+        .upload-container {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .upload-btn:hover {
+            background: #1a252f;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .preview-item {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+
+        /* Стилове за оценяване */
+        .jury-login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .jury-evaluation {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .criteria-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .criteria-item h4 {
+            margin-bottom: 10px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 5px;
+        }
+
+        .star {
+            font-size: 24px;
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .star.active {
+            color: #f1c40f;
+        }
+
+        /* Стилове за линка на журито */
+        #jury-link-nav {
+            display: flex;
+            align-items: center;
+        }
+        #jury-link-nav::after {
+            content: "↗";
+            margin-left: 5px;
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+        #jury-link-nav:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav>
+        <div class="nav-container">
+            <div class="burger-menu" onclick="toggleMenu()">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </div>
+            <ul id="nav-menu">
+                <li><a href="#" onclick="showPage('home')" class="active" data-page="home">Начало</a></li>
+                <li><a href="#" onclick="showPage('about')" data-page="about">За събитието</a></li>
+                <li><a href="#" onclick="showPage('competition')" data-page="competition">Състезавай се</a></li>
+                <li><a href="#" onclick="showPage('schedule')" data-page="schedule">Програма</a></li>
+                <li><a href="#" onclick="showPage('gallery')" data-page="gallery">Галерия</a></li>
+                <li id="login-nav"><a href="#" onclick="showPage('login')" data-page="login">Вход</a></li>
+                <li id="register-nav"><a href="#" onclick="showPage('register')" data-page="register">Регистрация</a></li>
+                <li id="profile-nav" style="display:none;"><a href="#" onclick="showPage('profile')" data-page="profile">Профил</a></li>
+                <li id="admin-nav" style="display:none;"><a href="#" onclick="showPage('admin')" data-page="admin">Админ</a></li>
+                <li id="jury-nav" style="display:none;"><a href="#" id="jury-link-nav" data-page="jury">Оцени</a></li>
+                <li id="logout-nav" style="display:none;"><a href="#" onclick="logout()">Изход</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Начална страница -->
+    <div id="home" class="page active">
+        <div class="container">
+            <div class="card">
+                <h1>Creative Coders</h1>
+                <p>Младежки международен център "Меден рудник"</p>
+                <p>16 август 2025</p>
+                <a href="#" onclick="showPage('register')" class="btn">Регистрация</a>
+                <a href="#" onclick="showPage('login')" class="btn btn-success">Вход </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- За събитието -->
+    <div id="about" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <h2>За събитието</h2>
+                </div>
+                <p>Creative Coders е събитие, което събира млади таланти от цялата страна. В рамките на 6 часа участниците ще имат възможността да работят върху иновативни проекти и да се състезават за призови награди.</p>
+                <p>Място на провеждане: Младежки международен център "Меден рудник", Бургас</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Конкурсна страница -->
+    <div id="competition" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <h2>Състезавай се</h2>
+                </div>
+                <div id="competition-content">
+                    <!-- Съдържанието ще се зарежда динамично -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Програма -->
+    <div id="schedule" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <h2>Програма</h2>
+                </div>
+                
+                <!-- Mobile-friendly таблица -->
+                <div class="schedule-container">
+                    <!-- Десктоп версия -->
+                    <table class="schedule-table desktop-view">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Час</th>
+                                <th>Дейност</th>
+                                <th>Място</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>25.7.2025</td>
+                                <td>09:10 - 09:35</td>
+                                <td>Регистрация на участници</td>
+                                <td>Входна зона</td>
+                            </tr>
+                            <tr>
+                                <td>25.7.2025</td>
+                                <td>09:40 - 10:05</td>
+                                <td>Официално откриване</td>
+                                <td>Конгресна зала</td>
+                            </tr>
+                            <tr>
+                                <td>25.7.2025</td>
+                                <td>10:10 - 11:10</td>
+                                <td>Работа по проекта</td>
+                                <td>Работни зали</td>
+                            </tr>
+                            <tr>
+                                <td>25.7.2025</td>
+                                <td>11:10 - 11:40</td>
+                                <td>Обяд</td>
+                                <td>Столовата</td>
+                            </tr>
+                            <tr>
+                                <td>25.7.2025</td>
+                                <td>11:40 - 11:50</td>
+                                <td>Настаняване за защити</td>
+                                <td>Конгресна зала</td>
+                            </tr>
+                            <tr>
+                                <td>25.7.2025</td>
+                                <td>11:50 - 13:50</td>
+                                <td>Защити</td>
+                                <td>Конгресна зала</td>
+                            </tr>
+                            <tr>
+
+                                <td>25.7.2025</td>
+                                <td>13:50 - 14:00</td>
+                                <td>Кратка пауза</td>
+                            </tr>
+                            <tr>
+                                <td>25.7.2025</td>
+                                <td>14:05 - 14:35</td>
+                                <td>Награждаване</td>
+                                <td>Конгресна зала</td>
+                            </tr>
+                            <tr>
+                                <td>25.7.2025</td>
+                                <td>14:35 - 14:45</td>
+                                <td>Закриване</td>
+                                <td>Конгресна зала</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <!-- Мобилна версия -->
+                    <div class="mobile-view">
+                        <div class="schedule-item">
+                            <div class="schedule-date">25.7.2025</div>
+                            <div class="schedule-time">09:10 - 09:35</div>
+                            <div class="schedule-activity">Регистрация на участници</div>
+                            <div class="schedule-location">Входна зона</div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-date">25.7.2025</div>
+                            <div class="schedule-time">09:40 - 10:05</div>
+                            <div class="schedule-activity">Официално откриване</div>
+                            <div class="schedule-location">Конгресна зала</div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-date">25.7.2025</div>
+                            <div class="schedule-time">10:10 - 11:10</div>
+                            <div class="schedule-activity">Работа по проекта</div>
+                            <div class="schedule-location">Работни зали</div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-date">25.7.2025</div>
+                            <div class="schedule-time">11:10 - 11:40</div>
+                            <div class="schedule-activity">Обяд</div>
+                            <div class="schedule-location">Столовата</div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-date">25.7.2025</div>
+                            <div class="schedule-time">11:40 - 11:50</div>
+                            <div class="schedule-activity">Настаняване за защити </div>
+                            <div class="schedule-location">Конгресна зала</div>
+                        </div>
+
+						<div class="schedule-item">
+                            <div class="schedule-date">25.7.2025</div>
+                            <div class="schedule-time">11:50 - 13:50</div>
+                            <div class="schedule-activity">Защити</div>
+                            <div class="schedule-location">Столовата</div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-date">25.7.2025</div>
+                            <div class="schedule-time">13:50 - 14:00</div>
+                            <div class="schedule-activity">Крата пауза</div>
+                            <div class="schedule-location">Конгресна зала </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-date">25.7.2025</div>
+                            <div class="schedule-time">14:05 - 14:35</div>
+                            <div class="schedule-activity">Награждаване </div>
+                            <div class="schedule-location">Конгресна зала </div>
+                        </div>
+                    
+                        <div class="schedule-item">
+                            <div class="schedule-date">25.7.2025</div>
+                            <div class="schedule-time">14:35 - 14:45</div>
+                            <div class="schedule-activity">Закриване</div>
+                            <div class="schedule-location">Конгресна зала</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Галерия -->
+    <div id="gallery" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <h2>Галерия</h2>
+                </div>
+                <div class="gallery-grid" id="gallery-images">
+                    <!-- Снимките ще се зареждат динамично -->
+                </div>
+                
+                
+                <!-- Форма за качване на снимки (видима само за администратори) -->
+                <div id="upload-section" style="display:none;">
+                    <div class="upload-container">
+                        <h3>Качване на нови снимки</h3>
+                        <p>Изберете снимки, които да добавите в галерията</p>
+                        <label for="file-input" class="upload-btn">Избери снимки</label>
+                        <input type="file" id="file-input" accept="image/*" multiple>
+                        <div class="preview-container" id="preview-container"></div>
+                        <button id="upload-btn" class="btn" style="display:none; margin-top:15px;">Качи снимките</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Регистрация -->
+    <div id="register" class="page">
+        <div class="container">
+            <div class="form-container">
+                <div class="section-header">
+                    <h2>Регистрация</h2>
+                </div>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="first-name">Име</label>
+                        <input type="text" id="first-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Фамилия</label>
+                        <input type="text" id="last-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Имейл</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон</label>
+                        <input type="tel" id="phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Потребителско име</label>
+                        <input type="text" id="username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Парола</label>
+                        <input type="password" id="password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Години</label>
+                        <input type="number" id="age" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Роля</label>
+                        <select id="role" class="form-control">
+                            <option value="participant">Участник</option>
+                            <option value="judge">Жури</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-block">Регистрация</button>
+                </form>
+                <div id="register-success" class="alert alert-success" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вход -->
+    <div id="login" class="page">
+        <div class="container">
+            <div class="form-container">
+                <div class="section-header">
+                    <h2>Вход в системата</h2>
+                </div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username">Потребителско име</label>
+                        <input type="text" id="login-username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Парола</label>
+                        <input type="password" id="login-password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-block">Вход</button>
+                </form>
+                <div id="login-error" class="alert alert-danger" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Потребителски профил -->
+    <div id="profile" class="page">
+        <div class="container">
+            <div class="card">
+                <h2 id="welcome-message">Профил</h2>
+                <div class="form-group">
+                    <label>Име:</label>
+                    <p id="profile-first-name"></p>
+                </div>
+                <div class="form-group">
+                    <label>Фамилия:</label>
+                    <p id="profile-last-name"></p>
+                </div>
+                <div class="form-group">
+                    <label>Имейл:</label>
+                    <p id="profile-email"></p>
+                </div>
+                <div class="form-group">
+                    <label>Телефон:</label>
+                    <p id="profile-phone"></p>
+                </div>
+                <div class="form-group">
+                    <label>Години:</label>
+                    <p id="profile-age"></p>
+                </div>
+                <div class="form-group">
+                    <label>Роля:</label>
+                    <p id="profile-role"></p>
+                </div>
+                <button onclick="logout()" class="btn btn-danger">Изход</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Страница за оценяване от журито -->
+    <div id="jury" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <h2>Оценяване на проекти</h2>
+                </div>
+                
+                <div id="jury-login-section">
+                    <div class="jury-login-form">
+                        <h3>Вход за жури</h3>
+                        <p>Моля, въведете вашите данни за достъп</p>
+                        <form id="jury-login-form">
+                            <div class="form-group">
+                                <label for="jury-username">Потребителско име</label>
+                                <input type="text" id="jury-username" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="jury-password">Парола</label>
+                                <input type="password" id="jury-password" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-block">Вход</button>
+                        </form>
+                        <div id="jury-login-error" class="alert alert-danger" style="display:none;"></div>
+                    </div>
+                </div>
+                
+                <div id="jury-evaluation-section" style="display:none;">
+                    <h3>Оценка на проекти</h3>
+                    <p>Моля, оценете проектите според следните критерии:</p>
+                    
+                    <div class="jury-evaluation">
+                        <h4>Проект 1: Уеб приложение за управление на събития</h4>
+                        <div class="criteria-item">
+                            <h4>Иновативност</h4>
+                            <div class="rating-stars">
+                                <span class="star" onclick="rate(this, 1)">★</span>
+                                <span class="star" onclick="rate(this, 2)">★</span>
+                                <span class="star" onclick="rate(this, 3)">★</span>
+                                <span class="star" onclick="rate(this, 4)">★</span>
+                                <span class="star" onclick="rate(this, 5)">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <h4>Функционалност</h4>
+                            <div class="rating-stars">
+                                <span class="star" onclick="rate(this, 1)">★</span>
+                                <span class="star" onclick="rate(this, 2)">★</span>
+                                <span class="star" onclick="rate(this, 3)">★</span>
+                                <span class="star" onclick="rate(this, 4)">★</span>
+                                <span class="star" onclick="rate(this, 5)">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <h4>Дизайн</h4>
+                            <div class="rating-stars">
+                                <span class="star" onclick="rate(this, 1)">★</span>
+                                <span class="star" onclick="rate(this, 2)">★</span>
+                                <span class="star" onclick="rate(this, 3)">★</span>
+                                <span class="star" onclick="rate(this, 4)">★</span>
+                                <span class="star" onclick="rate(this, 5)">★</span>
+                            </div>
+                        </div>
+                        <button class="btn">Изпрати оценка</button>
+                    </div>
+                    
+                    <div class="jury-evaluation">
+                        <h4>Проект 2: Мобилно приложение за екология</h4>
+                        <div class="criteria-item">
+                            <h4>Иновативност</h4>
+                            <div class="rating-stars">
+                                <span class="star" onclick="rate(this, 1)">★</span>
+                                <span class="star" onclick="rate(this, 2)">★</span>
+                                <span class="star" onclick="rate(this, 3)">★</span>
+                                <span class="star" onclick="rate(this, 4)">★</span>
+                                <span class="star" onclick="rate(this, 5)">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <h4>Функционалност</h4>
+                            <div class="rating-stars">
+                                <span class="star" onclick="rate(this, 1)">★</span>
+                                <span class="star" onclick="rate(this, 2)">★</span>
+                                <span class="star" onclick="rate(this, 3)">★</span>
+                                <span class="star" onclick="rate(this, 4)">★</span>
+                                <span class="star" onclick="rate(this, 5)">★</span>
+                            </div>
+                        </div>
+                        <div class="criteria-item">
+                            <h4>Дизайн</h4>
+                            <div class="rating-stars">
+                                <span class="star" onclick="rate(this, 1)">★</span>
+                                <span class="star" onclick="rate(this, 2)">★</span>
+                                <span class="star" onclick="rate(this, 3)">★</span>
+                                <span class="star" onclick="rate(this, 4)">★</span>
+                                <span class="star" onclick="rate(this, 5)">★</span>
+                            </div>
+                        </div>
+                        <button class="btn">Изпрати оценка</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Административен панел -->
+    <div id="admin" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="section-header">
+                    <h2>Административен панел</h2>
+                </div>
+                
+                <div class="card admin-form">
+                    <h3>Управление на Creative Coders</h3>
+                    <form id="competition-form">
+                        <div class="form-group">
+                            <label for="competition-status">Статус на конкурса</label>
+                            <select id="competition-status" class="form-control" required>
+                                <option value="active">Активен</option>
+                                <option value="inactive">Неактивен</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="competition-title">Заглавие</label>
+                            <input type="text" id="competition-title" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="competition-description">Описание</label>
+                            <textarea id="competition-description" class="form-control" rows="5" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="competition-link">Линк към задачата</label>
+                            <input type="url" id="competition-link" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jury-link">Линк за журито </label>
+                            <input type="url" id="jury-link" class="form-control" placeholder="https://example.com/jury" required>
+                        </div>
+                        <button type="submit" class="btn">Запази настройките</button>
+                    </form>
+                    <div id="competition-success" class="alert alert-success" style="display:none;"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>Добавяне на член на екипа</h3>
+                    <form id="add-team-form">
+                        <div class="form-group">
+                            <label for="team-username">Потребителско име</label>
+                            <input type="text" id="team-username" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-password">Парола</label>
+                            <input type="text" id="team-password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-role">Роля</label>
+                            <select id="team-role" class="form-control" required>
+                                <option value="organizer">Организатор</option>
+                                <option value="judge">Жури</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">Добави</button>
+                    </form>
+                </div>
+                
+                <h3>Всички участници</h3>
+                <table id="participants-table">
+                    <thead>
+                        <tr>
+                            <th>Име</th>
+                            <th>Фамилия</th>
+                            <th>Потребителско име</th>
+                            <th>Парола</th>
+                            <th>Имейл</th>
+                            <th>Телефон</th>
+                            <th>Години</th>
+                            <th>Роля</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Данните ще се попълнят чрез JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модален прозорец за промяна на парола -->
+    <div id="password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Промяна на парола</h3>
+            <form id="change-password-form">
+                <input type="hidden" id="edit-username">
+                <div class="form-group">
+                    <label for="new-password">Нова парола:</label>
+                    <input type="text" id="new-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn">Запази</button>
+            </form>
+        </div>
+    </div>
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>Creative Coders Бургас</h3>
+            <p>Състезание по програмиране за млади таланти от региона.</p>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Бързи връзки</h3>
+            <ul>
+                <li><a href="#" onclick="showPage('home')">Начало</a></li>
+                <li><a href="#" onclick="showPage('schedule')">График</a></li>
+                <li><a href="#" onclick="showPage('competition')">Задачи</a></li>
+                <li><a href="#" onclick="showPage('gallery')">Галерия</a></li>
+                <li><a href="#" onclick="showPage('register')">Регистрация</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Контакти</h3>
+            <ul class="contact-info">
+                <li><i class="fas fa-map-marker-alt"></i> Младежки център "Меден рудник", Бургас</li>
+                <li><i class="fas fa-envelope"></i> info@creative.coders-burgas.com</li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Партньори</h3>
+            <div class="partners">
+                <img src="https://d2j6dbq0eux0bg.cloudfront.net/images/111302667/4703419505.png" alt="Todorov Tees">
+                <img src="https://via.placeholder.com/80x40?text=Partner+2" alt="Партньор 2">
+                <img src="https://via.placeholder.com/80x40?text=Partner+3" alt="Партньор 3">
+            </div>
+        </div>
+    </div>
+    <div class="copy">
+        <p>&copy; 2025 Creative Coders Бургас. Всички права запазени.</p>
+        <p> </p>
+        <p>. </p>
+
+    </div>
+
+</footer>
+
+<style>
+    /* Стилове за футъра */
+    .site-footer {
+        background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+        color: white;
+        padding: 50px 0 0;
+        margin-top: 50px;
+    }
+    
+    .footer-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .footer-section {
+        margin-bottom: 30px;
+    }
+    
+    .footer-section h3 {
+        color: var(--secondary);
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    
+    .footer-section h3::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 2px;
+        background-color: var(--secondary);
+    }
+    
+    .footer-section p {
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+    
+    .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .social-links a {
+        color: white;
+        background-color: rgba(255,255,255,0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+        background-color: var(--secondary);
+        transform: translateY(-3px);
+    }
+    
+    .footer-section ul {
+        list-style: none;
+    }
+    
+    .footer-section ul li {
+        margin-bottom: 10px;
+    }
+    
+    .footer-section ul li a {
+        color: #ecf0f1;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .footer-section ul li a:hover {
+        color: var(--secondary);
+    }
+    
+    .contact-info li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .contact-info i {
+        margin-right: 10px;
+        color: var(--secondary);
+        width: 20px;
+        text-align: center;
+    }
+    
+    .partners {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .partners img {
+        height: 80px;
+        width: auto;
+        filter: grayscale(100%) brightness(200%);
+        opacity: 0.7;
+        transition: all 0.3s ease;
+    }
+    
+    .partners img:hover {
+        filter: grayscale(100%) brightness(100%);
+        opacity: 1;
+    }
+    
+    .footer-bottom {
+        background-color: rgba(0,0,0,0.2);
+        padding: 20px 0;
+        text-align: center;
+    }
+    
+    .footer-bottom p {
+        margin-bottom: 10px;
+        color: rgba(255,255,255,0.7);
+    }
+    
+    .legal-links {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .legal-links a {
+        color: rgba(255,255,255,0.7);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+    }
+    
+    .legal-links a:hover {
+        color: white;
+    }
+    .copy{
+         text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+        .footer-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .legal-links {
+            flex-direction: column;
+            gap: 5px;
+        }
+    }
+</style>
+
+    <script>
+        // База данни (локално съхранение)
+        let users = JSON.parse(localStorage.getItem('hackathon_users')) || [];
+        let teamMembers = JSON.parse(localStorage.getItem('hackathon_team')) || [];
+        let galleryImages = JSON.parse(localStorage.getItem('gallery_images')) || [];
+        let currentUser = null;
+        let currentPage = 'home';
+        
+        // Настройки за конкурса
+        let competitionSettings = JSON.parse(localStorage.getItem('competition_settings')) || {
+            status: 'inactive',
+            title: 'Хакатон Задача 2023',
+            description: 'Регистрирайте се, за да участвате в конкурса и да получите достъп до задачата.',
+            link: '#',
+            juryLink: '#'
+        };
+        
+        // Инициализация на администраторски акаунт (ако не съществува)
+        if (!users.some(user => user.username === 'admin')) {
+            const adminUser = {
+                firstName: 'Админ',
+                lastName: 'Администратор',
+                email: 'admin@hackathon.bg',
+                phone: '0888123456',
+                username: 'admin',
+                password: 'admin123',
+                age: 30,
+                isAdmin: true,
+                role: 'admin'
+            };
+            users.push(adminUser);
+            localStorage.setItem('hackathon_users', JSON.stringify(users));
+        }
+        
+        // Инициализация на галерията (ако е празна)
+        if (galleryImages.length === 0) {
+            galleryImages = [
+                { id: 1, url: 'https://via.placeholder.com/300x200?text=Снимка+1', title: 'Снимка 1' },
+                { id: 2, url: 'https://via.placeholder.com/300x200?text=Снимка+2', title: 'Снимка 2' },
+                { id: 3, url: 'https://via.placeholder.com/300x200?text=Снимка+3', title: 'Снимка 3' },
+                { id: 4, url: 'https://via.placeholder.com/300x200?text=Снимка+4', title: 'Снимка 4' },
+                { id: 5, url: 'https://via.placeholder.com/300x200?text=Снимка+5', title: 'Снимка 5' },
+                { id: 6, url: 'https://via.placeholder.com/300x200?text=Снимка+6', title: 'Снимка 6' },
+                { id: 7, url: 'https://via.placeholder.com/300x200?text=Снимка+7', title: 'Снимка 7' },
+                { id: 8, url: 'https://via.placeholder.com/300x200?text=Снимка+8', title: 'Снимка 8' }
+            ];
+            localStorage.setItem('gallery_images', JSON.stringify(galleryImages));
+        }
+        
+        // Функция за показване на страница
+        function showPage(pageId) {
+            // Затваряме менюто при избор на страница
+            closeMenu();
+            
+            // Запазваме текущата страница
+            currentPage = pageId;
+            
+            // Скриваме всички страници
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Показваме избраната страница
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+            
+            // Обновяваме активния линк в навигацията
+            updateActiveNavLink();
+            
+            // Ако е конкурсна страница, зареди съдържанието
+            if (pageId === 'competition') {
+                loadCompetitionPage();
+            } else if (pageId === 'gallery') {
+                loadGallery();
+            } else if (pageId === 'jury') {
+                // Ако потребителят е вече влязъл като жури, пренасочваме към линка
+                if (currentUser && currentUser.role === 'judge') {
+                    if (competitionSettings.juryLink && competitionSettings.juryLink !== '#') {
+                        window.open(competitionSettings.juryLink, '_blank');
+                    } else {
+                        alert('Линкът за оценяване все още не е конфигуриран от администратора');
+                    }
+                }
+            }
+        }
+
+        // Функция за зареждане на галерията
+        function loadGallery() {
+            const galleryContainer = document.getElementById('gallery-images');
+            galleryContainer.innerHTML = '';
+            
+            galleryImages.forEach(image => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.style.backgroundImage = `url('${image.url}')`;
+                item.innerHTML = `<div>${image.title}</div>`;
+                galleryContainer.appendChild(item);
+            });
+            
+            // Покажи формата за качване само за администратори
+            if (currentUser && currentUser.isAdmin) {
+                document.getElementById('upload-section').style.display = 'block';
+            } else {
+                document.getElementById('upload-section').style.display = 'none';
+            }
+        }
+
+        // Функция за обновяване на активния линк в навигацията
+        function updateActiveNavLink() {
+            const navLinks = document.querySelectorAll('nav a[data-page]');
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-page') === currentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Функция за затваряне на менюто
+        function closeMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            const burger = document.querySelector('.burger-menu');
+            navMenu.classList.remove('active');
+            burger.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Функция за превключване на мобилното меню
+        function toggleMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            const burger = document.querySelector('.burger-menu');
+            
+            navMenu.classList.toggle('active');
+            burger.classList.toggle('active');
+            
+            // Ако менюто е отворено, забраняваме скролването на body
+            if (navMenu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Затваряне на менюто при клик извън него
+        document.addEventListener('click', function(e) {
+            const navMenu = document.getElementById('nav-menu');
+            const burger = document.querySelector('.burger-menu');
+            
+            if (window.innerWidth <= 1027 && 
+                !e.target.closest('nav') && 
+                navMenu.classList.contains('active')) {
+                closeMenu();
+            }
+        });
+        
+        // Функция за зареждане на конкурсната страница
+        function loadCompetitionPage() {
+            const contentDiv = document.getElementById('competition-content');
+            
+            let statusClass = competitionSettings.status === 'active' ? 'status-active' : 'status-inactive';
+            let statusText = competitionSettings.status === 'active' ? 'АКТИВЕН' : 'НЕАКТИВЕН';
+            
+            contentDiv.innerHTML = `
+                <div class="competition-status ${statusClass}">${statusText}</div>
+                <h3>${competitionSettings.title}</h3>
+                <p>${competitionSettings.description}</p>
+                
+                ${competitionSettings.status === 'active' ? 
+                    `<a href="${competitionSettings.link}" target="_blank" class="task-link pulse-animation">Към задачата →</a>` : 
+                    '<p>Конкурсът в момента не е активен. Моля, проверете по-късно.</p>'}
+            `;
+        }
+        
+        // Функция за регистрация на нов потребител
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const role = document.getElementById('role').value;
+            
+            const user = {
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                age: document.getElementById('age').value,
+                isAdmin: false,
+                role: role
+            };
+            
+            // Проверка за съществуващ потребител
+            if (users.some(u => u.username === user.username)) {
+                alert('Потребителското име вече е заето!');
+                return;
+            }
+            
+            users.push(user);
+            localStorage.setItem('hackathon_users', JSON.stringify(users));
+            
+            // Ако е регистриран като жури, добавяме го и в екипа
+            if (role === 'judge') {
+                teamMembers.push({
+                    username: user.username,
+                    password: user.password,
+                    role: 'judge'
+                });
+                localStorage.setItem('hackathon_team', JSON.stringify(teamMembers));
+            }
+            
+            document.getElementById('register-success').textContent = 'Успешна регистрация! Можете да влезете в системата.';
+            document.getElementById('register-success').style.display = 'block';
+            document.getElementById('register-form').reset();
+            
+            setTimeout(() => {
+                document.getElementById('register-success').style.display = 'none';
+                showPage('login');
+            }, 3000);
+        });
+        
+        // Функция за вход на потребител
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                updateNavigation();
+                
+                if (user.isAdmin) {
+                    // Зареди текущите настройки на конкурса в админ формата
+                    document.getElementById('competition-status').value = competitionSettings.status;
+                    document.getElementById('competition-title').value = competitionSettings.title;
+                    document.getElementById('competition-description').value = competitionSettings.description;
+                    document.getElementById('competition-link').value = competitionSettings.link;
+                    document.getElementById('jury-link').value = competitionSettings.juryLink;
+                    
+                    showPage('admin');
+                    loadParticipants();
+                } else {
+                    showProfile();
+                    showPage('profile');
+                }
+            } else {
+                document.getElementById('login-error').textContent = 'Грешно потребителско име или парола!';
+                document.getElementById('login-error').style.display = 'block';
+            }
+        });
+        
+        // Функция за вход на жури
+        document.getElementById('jury-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('jury-username').value;
+            const password = document.getElementById('jury-password').value;
+            
+            const user = users.find(u => u.username === username && u.password === password && u.role === 'judge');
+            
+            if (user) {
+                currentUser = user;
+                updateNavigation();
+                
+                if (competitionSettings.juryLink && competitionSettings.juryLink !== '#') {
+                    window.open(competitionSettings.juryLink, '_blank');
+                } else {
+                    alert('Линкът за оценяване все още не е конфигуриран от администратора');
+                }
+            } else {
+                document.getElementById('jury-login-error').textContent = 'Грешно потребителско име, парола или нямате права на жури!';
+                document.getElementById('jury-login-error').style.display = 'block';
+            }
+        });
+        
+        // Функция за запазване на настройките на конкурса
+        document.getElementById('competition-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const juryLink = document.getElementById('jury-link').value;
+            if (juryLink && !juryLink.startsWith('http')) {
+                alert('Моля, въведете пълен URL адрес (започващ с http:// или https://)');
+                return;
+            }
+            
+            competitionSettings = {
+                status: document.getElementById('competition-status').value,
+                title: document.getElementById('competition-title').value,
+                description: document.getElementById('competition-description').value,
+                link: document.getElementById('competition-link').value,
+                juryLink: juryLink
+            };
+            
+            localStorage.setItem('competition_settings', JSON.stringify(competitionSettings));
+            
+            document.getElementById('competition-success').textContent = 'Настройките на конкурса са запазени успешно!';
+            document.getElementById('competition-success').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('competition-success').style.display = 'none';
+            }, 3000);
+            
+            // Обнови конкурсната страница
+            loadCompetitionPage();
+        });
+        
+        // Функция за показване на профилната информация
+        function showProfile() {
+            document.getElementById('welcome-message').textContent = `Здравей, ${currentUser.firstName}!`;
+            document.getElementById('profile-first-name').textContent = currentUser.firstName;
+            document.getElementById('profile-last-name').textContent = currentUser.lastName;
+            document.getElementById('profile-email').textContent = currentUser.email;
+            document.getElementById('profile-phone').textContent = currentUser.phone;
+            document.getElementById('profile-age').textContent = currentUser.age;
+            
+            // Показване на ролята
+            let roleText = '';
+            if (currentUser.isAdmin) {
+                roleText = 'Администратор';
+            } else if (currentUser.role === 'judge') {
+                roleText = 'Член на журито';
+            } else {
+                roleText = 'Участник';
+            }
+            document.getElementById('profile-role').textContent = roleText;
+        }
+        
+        // Функция за зареждане на участниците (за администратори)
+        function loadParticipants() {
+            const tableBody = document.querySelector('#participants-table tbody');
+            tableBody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                
+                // Определяне на ролята за показване
+                let roleText = '';
+                if (user.isAdmin) {
+                    roleText = 'Администратор';
+                } else if (user.role === 'judge') {
+                    roleText = 'Жури';
+                } else {
+                    roleText = 'Участник';
+                }
+                
+                row.innerHTML = `
+                    <td>${user.firstName}</td>
+                    <td>${user.lastName}</td>
+                    <td>${user.username}</td>
+                    <td>${user.password}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                    <td>${user.age}</td>
+                    <td>${roleText}</td>
+                    <td>
+                        <button onclick="openPasswordModal('${user.username}')" class="btn">Промени парола</button>
+                        <button onclick="deleteUser('${user.username}')" class="btn btn-danger">Изтрий</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Функция за добавяне на член на екипа
+        document.getElementById('add-team-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const teamMember = {
+                username: document.getElementById('team-username').value,
+                password: document.getElementById('team-password').value,
+                role: document.getElementById('team-role').value
+            };
+            
+            // Проверка за съществуващ потребител
+            if (users.some(u => u.username === teamMember.username)) {
+                alert('Потребителското име вече е заето!');
+                return;
+            }
+            
+            // Добавяне към екипа
+            teamMembers.push(teamMember);
+            localStorage.setItem('hackathon_team', JSON.stringify(teamMembers));
+            
+            // Добавяне като нормален потребител
+            const newUser = {
+                firstName: teamMember.role === 'judge' ? 'Член на журито' : 'Организатор',
+                lastName: '',
+                email: `${teamMember.username}@hackathon.bg`,
+                phone: '',
+                age: 25,
+                username: teamMember.username,
+                password: teamMember.password,
+                isAdmin: false,
+                role: teamMember.role
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('hackathon_users', JSON.stringify(users));
+            
+            alert(`Успешно добавен ${teamMember.role === 'judge' ? 'член на журито' : 'организатор'} в екипа!`);
+            document.getElementById('add-team-form').reset();
+            loadParticipants();
+        });
+        
+        // Функция за качване на снимките
+document.getElementById('upload-btn').addEventListener('click', function() {
+    const files = document.getElementById('file-input').files;
+    const previewContainer = document.getElementById('preview-container');
+    
+    if (files.length === 0) {
+        alert('Моля, изберете поне една снимка!');
+        return;
+    }
+    
+    // Генерираме уникални ID-та за новите снимки
+    let maxId = galleryImages.reduce((max, img) => Math.max(max, img.id), 0);
+    
+    // Добавяме новите снимки към галерията
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            maxId++;
+            galleryImages.push({
+                id: maxId,
+                url: e.target.result,
+                title: `Снимка ${maxId}`
+            });
+            
+            // Запазваме в localStorage
+            localStorage.setItem('gallery_images', JSON.stringify(galleryImages));
+            
+            // Презареждаме галерията
+            loadGallery();
+            
+            // Изчистваме формата
+            document.getElementById('file-input').value = '';
+            previewContainer.innerHTML = '';
+            document.getElementById('upload-btn').style.display = 'none';
+        };
+        
+        reader.readAsDataURL(file);
+    }
+    
+    alert('Снимките са качени успешно!');
+});
+
+// Функция за премахване на preview
+function removePreview(button) {
+    button.parentElement.remove();
+    const previewContainer = document.getElementById('preview-container');
+    if (previewContainer.children.length === 0) {
+        document.getElementById('upload-btn').style.display = 'none';
+    }
+}
+        
+function loadGallery() {
+    const galleryContainer = document.getElementById('gallery-images');
+    galleryContainer.innerHTML = '';
+    
+    galleryImages.forEach(image => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.style.backgroundImage = `url('${image.url}')`;
+        
+        // Add the image title
+        const titleDiv = document.createElement('div');
+        titleDiv.textContent = image.title;
+        
+        // Add delete button for admin users
+        if (currentUser && currentUser.isAdmin) {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                deleteImage(image.id);
+            };
+            item.appendChild(deleteBtn);
+        }
+        
+        item.appendChild(titleDiv);
+        galleryContainer.appendChild(item);
+    });
+    
+    // Show upload section only for admin
+    if (currentUser && currentUser.isAdmin) {
+        document.getElementById('upload-section').style.display = 'block';
+    } else {
+        document.getElementById('upload-section').style.display = 'none';
+    }
+}
+
+function deleteImage(imageId) {
+    if (confirm('Сигурни ли сте, че искате да изтриете тази снимка?')) {
+        galleryImages = galleryImages.filter(img => img.id !== imageId);
+        localStorage.setItem('gallery_images', JSON.stringify(galleryImages));
+        loadGallery();
+    }
+}
+        
+        // Функция за оценяване от журито
+        function rate(star, rating) {
+            const stars = star.parentElement.querySelectorAll('.star');
+            
+            // Маркираме звездите до избраната включително
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+        }
+        
+        // Функция за отваряне на модален прозорец за промяна на парола
+        function openPasswordModal(username) {
+            document.getElementById('edit-username').value = username;
+            document.getElementById('password-modal').style.display = 'block';
+        }
+        
+        // Функция за затваряне на модалния прозорец
+        function closeModal() {
+            document.getElementById('password-modal').style.display = 'none';
+        }
+        
+        // Функция за промяна на парола
+        document.getElementById('change-password-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('edit-username').value;
+            const newPassword = document.getElementById('new-password').value;
+            
+            // Намираме потребителя и променяме паролата
+            const userIndex = users.findIndex(u => u.username === username);
+            if (userIndex !== -1) {
+                users[userIndex].password = newPassword;
+                localStorage.setItem('hackathon_users', JSON.stringify(users));
+                
+                // Ако е член на екипа, променяме и там паролата
+                const teamIndex = teamMembers.findIndex(m => m.username === username);
+                if (teamIndex !== -1) {
+                    teamMembers[teamIndex].password = newPassword;
+                    localStorage.setItem('hackathon_team', JSON.stringify(teamMembers));
+                }
+                
+                alert('Паролата е променена успешно!');
+                closeModal();
+                loadParticipants();
+            }
+        });
+        
+        // Функция за изтриване на потребител
+        function deleteUser(username) {
+            if (confirm('Сигурни ли сте, че искате да изтриете този потребител?')) {
+                users = users.filter(u => u.username !== username);
+                localStorage.setItem('hackathon_users', JSON.stringify(users));
+                
+                // Премахване и от екипа, ако е член
+                teamMembers = teamMembers.filter(m => m.username !== username);
+                localStorage.setItem('hackathon_team', JSON.stringify(teamMembers));
+                
+                loadParticipants();
+            }
+        }
+        
+        // Функция за изход от системата
+        function logout() {
+            currentUser = null;
+            updateNavigation();
+            showPage('home');
+        }
+        
+        // Функция за обновяване на навигацията според текущия потребител
+        function updateNavigation() {
+            const loginNav = document.getElementById('login-nav');
+            const registerNav = document.getElementById('register-nav');
+            const profileNav = document.getElementById('profile-nav');
+            const adminNav = document.getElementById('admin-nav');
+            const juryNav = document.getElementById('jury-nav');
+            const logoutNav = document.getElementById('logout-nav');
+            const juryLinkNav = document.getElementById('jury-link-nav');
+            
+            if (currentUser) {
+                loginNav.style.display = 'none';
+                registerNav.style.display = 'none';
+                profileNav.style.display = 'block';
+                logoutNav.style.display = 'block';
+                
+                if (currentUser.isAdmin) {
+                    adminNav.style.display = 'block';
+                    juryNav.style.display = 'none';
+                } else if (currentUser.role === 'judge') {
+                    adminNav.style.display = 'none';
+                    juryNav.style.display = 'block';
+                    
+                    // Конфигуриране на линка за журито
+                    if (competitionSettings.juryLink && competitionSettings.juryLink !== '#') {
+                        juryLinkNav.href = competitionSettings.juryLink;
+                        juryLinkNav.setAttribute('target', '_blank');
+                        juryLinkNav.onclick = null;
+                    } else {
+                        juryLinkNav.href = '#';
+                        juryLinkNav.removeAttribute('target');
+                        juryLinkNav.onclick = function(e) {
+                            e.preventDefault();
+                            alert('Линкът за оценяване все още не е конфигуриран от администратора');
+                        };
+                    }
+                } else {
+                    adminNav.style.display = 'none';
+                    juryNav.style.display = 'none';
+                }
+            } else {
+                loginNav.style.display = 'block';
+                registerNav.style.display = 'block';
+                profileNav.style.display = 'none';
+                adminNav.style.display = 'none';
+                juryNav.style.display = 'none';
+                logoutNav.style.display = 'none';
+            }
+            
+            // Принудително показване на всички елементи на мобилни устройства
+            if (window.innerWidth <= 1027) {
+                loginNav.style.display = 'block';
+                registerNav.style.display = 'block';
+                if (currentUser) {
+                    profileNav.style.display = 'block';
+                    logoutNav.style.display = 'block';
+                    if (currentUser.isAdmin) {
+                        adminNav.style.display = 'block';
+                    }
+                    if (currentUser.role === 'judge') {
+                        juryNav.style.display = 'block';
+                    }
+                }
+            }
+            
+            // Обновяваме активния линк след промяна на навигацията
+            updateActiveNavLink();
+        }
+
+        // Добавете event listener за ресайз на прозореца
+        window.addEventListener('resize', function() {
+            updateNavigation();
+        });
+
+        // Инициализация при зареждане на страницата
+        document.addEventListener('DOMContentLoaded', function() {
+            // Зареждане на настройките
+            if (localStorage.getItem('competition_settings')) {
+                competitionSettings = JSON.parse(localStorage.getItem('competition_settings'));
+                // Попълване на полетата в административния панел
+                if (document.getElementById('competition-status')) {
+                    document.getElementById('competition-status').value = competitionSettings.status;
+                    document.getElementById('competition-title').value = competitionSettings.title;
+                    document.getElementById('competition-description').value = competitionSettings.description;
+                    document.getElementById('competition-link').value = competitionSettings.link;
+                    document.getElementById('jury-link').value = competitionSettings.juryLink;
+                }
+            }
+            
+            updateNavigation();
+            showPage('home');
+            loadCompetitionPage();
+            loadGallery();
+        });
+    </script>
+</body>
+</html>
