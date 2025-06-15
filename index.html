@@ -162,7 +162,18 @@
             }
             
             /* Осигуряваме, че всички навигационни елементи са видими */
-            #login-nav, #register-nav, #profile-nav, #admin-nav, #logout-nav, #jury-nav {
+            #login-nav, #register-nav, #profile-nav, #logout-nav {
+                display: block !important;
+            }
+            
+            /* Специални правила за админ и жури опции */
+            #admin-nav, #jury-nav {
+                display: none !important;
+            }
+            
+            /* Показваме само ако потребителят е логнат със съответната роля */
+            .admin-logged-in #admin-nav,
+            .jury-logged-in #jury-nav {
                 display: block !important;
             }
             
@@ -2173,9 +2184,13 @@ function deleteImage(imageId) {
                 if (currentUser.isAdmin) {
                     adminNav.style.display = 'block';
                     juryNav.style.display = 'none';
+                    document.body.classList.add('admin-logged-in');
+                    document.body.classList.remove('jury-logged-in');
                 } else if (currentUser.role === 'judge') {
                     adminNav.style.display = 'none';
                     juryNav.style.display = 'block';
+                    document.body.classList.add('jury-logged-in');
+                    document.body.classList.remove('admin-logged-in');
                     
                     // Конфигуриране на линка за журито
                     if (competitionSettings.juryLink && competitionSettings.juryLink !== '#') {
@@ -2193,6 +2208,7 @@ function deleteImage(imageId) {
                 } else {
                     adminNav.style.display = 'none';
                     juryNav.style.display = 'none';
+                    document.body.classList.remove('admin-logged-in', 'jury-logged-in');
                 }
             } else {
                 loginNav.style.display = 'block';
@@ -2201,22 +2217,7 @@ function deleteImage(imageId) {
                 adminNav.style.display = 'none';
                 juryNav.style.display = 'none';
                 logoutNav.style.display = 'none';
-            }
-            
-            // Принудително показване на всички елементи на мобилни устройства
-            if (window.innerWidth <= 1027) {
-                loginNav.style.display = 'block';
-                registerNav.style.display = 'block';
-                if (currentUser) {
-                    profileNav.style.display = 'block';
-                    logoutNav.style.display = 'block';
-                    if (currentUser.isAdmin) {
-                        adminNav.style.display = 'block';
-                    }
-                    if (currentUser.role === 'judge') {
-                        juryNav.style.display = 'block';
-                    }
-                }
+                document.body.classList.remove('admin-logged-in', 'jury-logged-in');
             }
             
             // Обновяваме активния линк след промяна на навигацията
